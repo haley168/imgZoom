@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport"
+        content="initial-scale=1,maximum-scale=1,user-scalable=no,width=device-width,height=device-height">
+  <meta charset="UTF-8">
+  <meta name="Author" content="haley">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+  <title>图片放大</title>
+  <style>
+    .box>img{
+      width:200px;
+    }
+    .imgBox{
+      left:0;
+      top:0;
+      right:0;
+      bottom:0;
+      background-color: rgba(23,23,23,.3);
+      text-align: center;
+      vertical-align: middle;
+      position: absolute;
+      display: none;
+      cursor: pointer;
+    }
+    .imgBox--content{
+      position: absolute;
+      width:800px;
+      height: 600px;
+      left:50%;
+      top:50%;
+      margin:-300px 0 0 -400px;
+      text-align: center;
+      vertical-align: middle;
+      /*overflow: hidden;*/
+    }
+    .imgBox--content>img{
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<div class="box">
+  <img src="img/pic1.jpg" alt="" class="imgEnlarge"/>
+  <img src="img/pic2.jpg" alt="" class="imgEnlarge"/>
+  <img src="img/pic.jpg" alt="" class="imgEnlarge"/>
+  <img src="img/pic.jpg" alt="" class="imgEnlarge3"/>
+  <img src="img/pic.jpg" alt="" class="imgEnlarge2"/>
+  <img src="img/pic.jpg" alt="" class="imgEnlarge3"/>
+</div>
+
+<script>
+
+  $(function(){
+    $.initImg();
+    $('.imgEnlarge').imgEnlarge();
+    $('.imgEnlarge2').imgEnlarge();
+    $('.imgEnlarge3').imgEnlarge({interval:2000});
+  });
+</script>
+<script>
+  //一次只定义一个函数
+  (function($){
+    $.fn.extend({
+      imgEnlarge:function(options){
+        var defaults = {interval:400};
+        options = $.extend({},defaults, options);
+        return $(this).each(function(){
+          $(this).css({cursor:'pointer' });
+          $(this).click(function(){
+            $('.imgBox--content').children('img').prop('src',this.src).load(function(){
+              if(this.width>this.height){
+                $(this).css({'width':'100%','height':'auto'});
+              }else{
+                $(this).css({'height':'100%','width':'auto'});
+              }
+            });
+            $('.imgBox').fadeIn(options.interval);
+          });
+          $('.imgBox').click(function(){
+            $(this).fadeOut(options.interval);
+          });
+        });
+      }
+    });
+    $.extend({
+      initImg:function(){
+        $('body').append('<div class="imgBox"><div class="imgBox--content"><img src="" alt=""/></div></div>');
+      }
+    });
+  })(window.jQuery);//此处也可写成(jQuery);
+</script>
+</body>
+</html>
